@@ -1,0 +1,47 @@
+# Node / general
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.*.local
+.env.local
+config/env/.env.*.example
+
+# Logs
+logs/
+*.log
+*.tmp
+*.swp
+
+# Build output
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Coverage / test
+coverage/
+.nyc_output/
+
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# OS / misc
+.DS_Store
+Thumbs.db
+
+# Mongo / data
+data/
+dump/
+
+# Docker
+*.pid
