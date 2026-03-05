@@ -27,9 +27,30 @@ const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Academics
+ *   description: Academic years, classes, and subjects
+ */
+
 // Read access for all authenticated; write restricted to ADMIN/TEACHER
 router.use(authMiddleware);
 
+/**
+ * @swagger
+ * /academics/years:
+ *   get:
+ *     summary: List academic years
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ *   post:
+ *     summary: Create academic year
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ */
 // Academic years
 router
   .route('/years')
@@ -55,6 +76,20 @@ router
     requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteAcademicYear(req, res, next)),
   );
 
+/**
+ * @swagger
+ * /academics/classes:
+ *   get:
+ *     summary: List classes
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ *   post:
+ *     summary: Create class
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ */
 // Classes
 router
   .route('/classes')
@@ -78,6 +113,20 @@ router
     requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteClass(req, res, next)),
   );
 
+/**
+ * @swagger
+ * /academics/subjects:
+ *   get:
+ *     summary: List subjects
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ *   post:
+ *     summary: Create subject
+ *     tags: [Academics]
+ *     security:
+ *       - bearerAuth: []
+ */
 // Subjects
 router
   .route('/subjects')

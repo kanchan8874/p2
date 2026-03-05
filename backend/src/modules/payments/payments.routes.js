@@ -21,10 +21,31 @@ const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Payments
+ *   description: Fees and payments (admin)
+ */
+
 // All payments routes require ADMIN (finance)
 router.use(authMiddleware, requireRoles(Roles.ADMIN));
 
 // Fee structures
+/**
+ * @swagger
+ * /payments/fee-structures:
+ *   get:
+ *     summary: List fee structures
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ *   post:
+ *     summary: Create fee structure
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ */
 router
   .route('/fee-structures')
   .get(listFeeStructures)

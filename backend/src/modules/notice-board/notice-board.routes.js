@@ -16,6 +16,28 @@ const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Notices
+ *   description: Notice board
+ */
+
+/**
+ * @swagger
+ * /notices:
+ *   get:
+ *     summary: List notices
+ *     tags: [Notices]
+ *     responses:
+ *       200:
+ *         description: Notices fetched successfully
+ *   post:
+ *     summary: Create notice
+ *     tags: [Notices]
+ *     security:
+ *       - bearerAuth: []
+ */
 router
   .route('/')
   .get(listNotices)
