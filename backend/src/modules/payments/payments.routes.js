@@ -16,8 +16,13 @@ const {
   validateCreateInvoicePayload,
   validateCreatePaymentPayload,
 } = require('./payments.validation');
+const { authMiddleware, requireRoles } = require('../../middlewares/auth.middleware');
+const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
+
+// All payments routes require ADMIN (finance)
+router.use(authMiddleware, requireRoles(Roles.ADMIN));
 
 // Fee structures
 router

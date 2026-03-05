@@ -5,14 +5,15 @@ const {
   getFacultyDashboard,
   getAdminDashboard,
 } = require('./portal.controller');
-const { authMiddleware } = require('../../middlewares/auth.middleware');
+const { authMiddleware, requireRoles } = require('../../middlewares/auth.middleware');
+const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get('/student/dashboard', getStudentDashboard);
-router.get('/faculty/dashboard', getFacultyDashboard);
-router.get('/admin/dashboard', getAdminDashboard);
+router.get('/student/dashboard', requireRoles(Roles.STUDENT), getStudentDashboard);
+router.get('/faculty/dashboard', requireRoles(Roles.TEACHER), getFacultyDashboard);
+router.get('/admin/dashboard', requireRoles(Roles.ADMIN), getAdminDashboard);
 
 module.exports = router;

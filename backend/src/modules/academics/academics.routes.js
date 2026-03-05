@@ -22,8 +22,13 @@ const {
   validateCreateClassPayload,
   validateCreateSubjectPayload,
 } = require('./academics.validation');
+const { authMiddleware, requireRoles } = require('../../middlewares/auth.middleware');
+const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
+
+// Read access for all authenticated; write restricted to ADMIN/TEACHER
+router.use(authMiddleware);
 
 // Academic years
 router
@@ -35,14 +40,20 @@ router
     } catch (err) {
       return next(err);
     }
-    return createAcademicYear(req, res, next);
+    return requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () =>
+      createAcademicYear(req, res, next),
+    );
   });
 
 router
   .route('/years/:id')
   .get(getAcademicYear)
-  .patch(updateAcademicYear)
-  .delete(deleteAcademicYear);
+  .patch((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => updateAcademicYear(req, res, next)),
+  )
+  .delete((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteAcademicYear(req, res, next)),
+  );
 
 // Classes
 router
@@ -54,14 +65,18 @@ router
     } catch (err) {
       return next(err);
     }
-    return createClass(req, res, next);
+    return requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => createClass(req, res, next));
   });
 
 router
   .route('/classes/:id')
   .get(getClass)
-  .patch(updateClass)
-  .delete(deleteClass);
+  .patch((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => updateClass(req, res, next)),
+  )
+  .delete((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteClass(req, res, next)),
+  );
 
 // Subjects
 router
@@ -73,13 +88,19 @@ router
     } catch (err) {
       return next(err);
     }
-    return createSubject(req, res, next);
+    return requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () =>
+      createSubject(req, res, next),
+    );
   });
 
 router
   .route('/subjects/:id')
   .get(getSubject)
-  .patch(updateSubject)
-  .delete(deleteSubject);
+  .patch((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => updateSubject(req, res, next)),
+  )
+  .delete((req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteSubject(req, res, next)),
+  );
 
 module.exports = router;

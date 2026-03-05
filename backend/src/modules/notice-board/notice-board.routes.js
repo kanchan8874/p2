@@ -11,32 +11,36 @@ const {
   validateCreateNoticePayload,
   validateUpdateNoticePayload,
 } = require('./notice-board.validation');
+const { authMiddleware, requireRoles } = require('../../middlewares/auth.middleware');
+const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
 
 router
   .route('/')
   .get(listNotices)
-  .post((req, res, next) => {
+  .post(authMiddleware, (req, res, next) => {
     try {
       validateCreateNoticePayload(req.body);
     } catch (err) {
       return next(err);
     }
-    return createNotice(req, res, next);
+    return requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => createNotice(req, res, next));
   });
 
 router
   .route('/:id')
   .get(getNotice)
-  .patch((req, res, next) => {
+  .patch(authMiddleware, (req, res, next) => {
     try {
       validateUpdateNoticePayload(req.body);
     } catch (err) {
       return next(err);
     }
-    return updateNotice(req, res, next);
+    return requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => updateNotice(req, res, next));
   })
-  .delete(deleteNotice);
+  .delete(authMiddleware, (req, res, next) =>
+    requireRoles(Roles.ADMIN, Roles.TEACHER)(req, res, () => deleteNotice(req, res, next)),
+  );
 
 module.exports = router;

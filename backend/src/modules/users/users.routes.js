@@ -11,8 +11,13 @@ const {
   validateCreateUserPayload,
   validateUpdateUserPayload,
 } = require('./users.validation');
+const { authMiddleware, requireRoles } = require('../../middlewares/auth.middleware');
+const { Roles } = require('../../constants/roles');
 
 const router = express.Router();
+
+// All user management routes restricted to ADMIN
+router.use(authMiddleware, requireRoles(Roles.ADMIN));
 
 router
   .route('/')
